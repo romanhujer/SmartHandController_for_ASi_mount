@@ -2,8 +2,9 @@
 Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/SmartHandController)
 
 
-
+NOTE:
 For SQM with TSL2591 sensor need using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
+and for Ephemeris Library download from https://github.com/hjd1964/ephemeris
 
 
 
