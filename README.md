@@ -1,6 +1,7 @@
-# OnStep Smart Hand Controller with Sky Quality Sensor
+# Wireles Smart Hand Controller for ASi mount (AM5/AM3)
+Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/SmartHandController)
 
-My modificatiosn for my PCB https://oshwlab.com/hujer.roman/wireless-shc
+
 
 For SQM with TSL2591 sensor need using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
 
