@@ -1,4 +1,4 @@
-# Wireles Smart Hand Controller for ASi mount (AM5/AM3)
+# Wireles Smart Hand Controller for ZWO mount (AM5/AM3)
 Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/SmartHandController)
 
 
