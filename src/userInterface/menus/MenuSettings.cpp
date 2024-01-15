@@ -165,7 +165,13 @@ void UI::menuBlankTimeout() {
 void UI::menuSound() {
   boolean sound = false;
   if (display->UserInterfaceInputValueBoolean(&keyPad, L_SET_BUZZER, &sound)) {
+#if ASI_MOUNT == OFF
     if (sound) message.show(onStep.Set(":SX97,1#"),false); else message.show(onStep.Set(":SX97,0#"),false);
+#else
+   if (sound) message.show(onStep.Set(":SBu1#"),false); else message.show(onStep.Set(":SBu0#"),false);
+#
+#endif
+
   }
 }
 

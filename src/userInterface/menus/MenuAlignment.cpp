@@ -78,7 +78,13 @@ void UI::menuAlignment() {
     } else
     if (resetAlign) {
       current_selection_L1 = 0; current_selection_L0 = 0; // Quit Menu
+#if ASI_MOUNT != OFF
+      if (onStep.Set(":NSC#") == CR_VALUE_SET) message.show(L_ALGN_RESUME0, L_ALGN_RESUME1, -1);
+#else
       if (onStep.Set(":hF#") == CR_VALUE_SET) message.show(L_ALGN_RESUME0, L_ALGN_RESUME1, -1);
+#endif
+
+
     } else
     if (starsForAlign>0) {
       // check if date/time is set, if not set it

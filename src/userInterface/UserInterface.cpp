@@ -210,15 +210,8 @@ void UI::poll() {
   // stop gotos
   if (status.getTrackingState() == Status::TRK_SLEWING || status.getParkState() == Status::PRK_PARKING) {
     if (keyPad.nsewPressed()) {
-#if ASI_MOUNT != OFF
-      SERIAL_ONSTEP.print(":Qe#\n:Qw#\n:Qn#\n:Qs#"); SERIAL_ONSTEP.flush();
-//      SERIAL_ONSTEP.print(":Qe#"); SERIAL_ONSTEP.flush();
-//      SERIAL_ONSTEP.print(":Qw#"); SERIAL_ONSTEP.flush();
-//      SERIAL_ONSTEP.print(":Qn#"); SERIAL_ONSTEP.flush();
-//      SERIAL_ONSTEP.print(":Qs#"); SERIAL_ONSTEP.flush();
-#else
+      VLF("MSG: Stop Goto");
       SERIAL_ONSTEP.print(":Q#"); SERIAL_ONSTEP.flush();
-#endif
       // if aligning, try another align star
       if (status.align != Status::ALI_OFF) status.align = static_cast<Status::AlignState>(status.align - 1);
       time_last_action = millis();
@@ -631,7 +624,11 @@ void UI::updateMainDisplay(u8g2_uint_t page) {
         x = display->getDisplayWidth() - display->getUTF8Width("000000000");
         u8g2_uint_t y = 36;
         display->setFont(LF_STANDARD);
+#if ASI_MOUNT == OFF
         display->drawUTF8(0, y, "UT");
+#else
+        display->drawUTF8(0, y, "LT");
+#endif
         display->setFont(LF_LARGE);
         display->DrawFwNumeric(x, y, us);
 
@@ -798,6 +795,7 @@ queryAgain:
   }
 
   CMD_RESULT r = onStep.Get(":GVP#", s);
+  VF("MSG: :GVP# "); VL(s); 
   if (r != CR_VALUE_GET || !(strstr(s, "On-Step") || strstr(s, "AM5") || strstr(s, "AM3"))) {
     if (++thisTry % 5 != 0) {
       goto queryAgain;
@@ -822,7 +820,7 @@ again2:
   // 1 = TOPOCENTRIC (does refraction)
   // 2 = ASTROMETRIC_J2000 (does refraction and precession/nutation)
   thisTry = 0;
-#if ASI_MOUNT != OFF
+#if ASI_MOUNT == OFF
   if (onStep.Get(":GXEE#", s) == CR_VALUE_GET && s[0] >= '0' && s[0] <= '3' && s[1] == 0) {
     if (s[0] == '0') {
       VLF("MSG: Connect, coords Observed Place");
@@ -832,7 +830,7 @@ again2:
     } else 
     if (s[0] == '1') {
       VLF("MSG: Connect, coords Topocentric");
-      telescopeCoordinates = TOPOCENTRIC; 
+      telescopeCoordinates =  TOPOCENTRIC; 
       message.show(L_CONNECTION, L_OK "!", 1000);
       status.connected = true;
     } else 
@@ -851,12 +849,15 @@ again2:
     message.show(L_COORDINATES, L_OBSERVED_PLACE ".", 2000);
   }
 #else 
-  telescopeCoordinates = ASTROMETRIC_J2000;
+  VLF("MSG: Connect, coords TOPOCENTRIC");
+  telescopeCoordinates =  TOPOCENTRIC; 
   message.show(L_CONNECTION, L_OK "!", 1000);
   status.connected = true;
 #endif
   // check to see if we have auxiliary features
+#if ASI_MOUNT == OFF  
   hasAuxFeatures = status.featureScan();
+#endif
   status.connected = true;
 }
 

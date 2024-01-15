@@ -36,7 +36,13 @@ void Status::updateAzAlt(boolean immediate) {
 void Status::updateTime(boolean immediate) {
   if (((millis() - lastStateTime > backgroundCommandRate) && connected) || immediate) {
     if (updateSeq%3 == 1 || immediate) {
+#if ASI_MOUNT != OFF    
+      hasInfoUTC = onStep.Get(":GL#", TempUniversalTime) == CR_VALUE_GET;
+#else
       hasInfoUTC = onStep.Get(":GX80#", TempUniversalTime) == CR_VALUE_GET;
+       
+#endif
+
       if (!hasInfoUTC) connected = false;
     }
     if (updateSeq%3 == 2 || immediate) {
@@ -50,8 +56,15 @@ void Status::updateTime(boolean immediate) {
 void Status::updateTel(boolean immediate) {
   if (((millis() - lastStateTel > backgroundCommandRate) && connected) || immediate) {
     if (updateSeq%3 == 0 || immediate) {
+
+#if ASI_MOUNT != OFF          
+      hasTelStatus = onStep.Get(":GU#", TelStatus) == CR_VALUE_GET;
+#else
       hasTelStatus = onStep.Get(":Gu#", TelStatus) == CR_VALUE_GET;
+#endif
+      VF("MSG:TelStqtus: "); VL(TelStatus) ;
       if (!hasTelStatus) connected = false;
+
       lastStateTel = millis();
     }
   }
@@ -315,7 +328,11 @@ bool Status::hasDateTime() {
   if (dateTimeKnownValid) return true; // once OnStep says the date/time has been set no need to keep asking
   bool dateTime = false; // default is to assume the date/time has been set unless OnStep tells us otherwise
   char out[20];
+#if ASI_MOUNT != OFF
+  if ((onStep.Get(":GC#", out) == CR_VALUE_GET)) dateTime = (out[0] == '0');
+#else
   if ((onStep.Get(":GX89#", out) == CR_VALUE_GET)) dateTime = (out[0] == '0');
+#endif
   if (dateTime == true) dateTimeKnownValid = true;
   return dateTime;
 }
@@ -330,6 +347,7 @@ bool Status::getT(double &T) {
     {
       int l = strlen(temp); if (l > 0) temp[l - 1] = 0;
       f = atof(temp);
+
 #if WEATHER != OFF
       f = onStep.MyTemperature;
 #endif 

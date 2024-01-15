@@ -23,9 +23,9 @@ class SQM {
     bool success = false;
     bool active = false;
     float sTemperature = NAN;
-    double mag = NAN;
-    float averageMag = NAN;  
-    float last_mag_per_sq_arcsec = NAN;
+    double mag = 0;
+    float averageMag = 0;  
+    float last_mag_per_sq_arcsec = 0;
     unsigned long last_mag_per_sq_arcsec_time = 0;
 };
 

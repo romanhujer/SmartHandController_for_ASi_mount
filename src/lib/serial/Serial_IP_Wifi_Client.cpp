@@ -12,7 +12,7 @@
 
     // special case where the port is the most common baud rate
     // so a standard call to begin(baud_rate) can still work
-#if ASI_MOUNT = ! OFF 
+#if ASI_MOUNT != OFF 
     port =  4030;
 #else
     if ((port < 9000 || port >= 10000 || port == 9600) && clientTimeoutMs == 2000 && persist == false) port = 9996;
