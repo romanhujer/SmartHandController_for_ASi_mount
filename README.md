@@ -3,7 +3,7 @@ Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/Sma
 
 
 NOTE:
-! ! !  A L P H A  -  V E R S I O N    N O T   W O R K I N G  N O W  ! ! ! 
+! ! !  A L P H A  -  V E R S I O N  _ N O T _ W O R K I N G  _  N O W  ! ! ! 
 
 
 The SHC adds dedicated hand controller functionality to an OnStep or OnStepX telescope controller. 
