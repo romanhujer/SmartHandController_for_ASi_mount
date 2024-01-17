@@ -3,9 +3,7 @@ Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/Sma
 
 
 NOTE:
-For SQM with TSL2591 sensor need using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
-and for Ephemeris Library download from https://github.com/hjd1964/ephemeris
-
+! ! !  A L P H A  -  V E R S I O N  _ N O T _ W O R K I N G  _  N O W  ! ! ! 
 
 
 The SHC adds dedicated hand controller functionality to an OnStep or OnStepX telescope controller. 
