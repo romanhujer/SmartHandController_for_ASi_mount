@@ -58,11 +58,87 @@ void Status::updateTel(boolean immediate) {
     if (updateSeq%3 == 0 || immediate) {
 
 #if ASI_MOUNT != OFF          
-      hasTelStatus = onStep.Get(":GU#", TelStatus) == CR_VALUE_GET;
+     hasTelStatus = onStep.Get(":GU#", TelStatus) == CR_VALUE_GET;
+// ZWO  Command: “:GU#”
+// Response:
+// n: no tracking（or not show）
+// N: stop or tracking（or not show）
+// L:Low power（or not show）
+// H: at home position（or not show）
+// G / Z: GEM/AZ Mode
+// S: RA stall（or not show）
+// s: DEC stall（or not show）
+// T: RA ST4 guiding（or not show）
+// t: DEC ST4 guiding（or not show）
+// nn：some flags of RA axis
+// nn：some flags of DEC axis
+// n：RA rate
+// n：DEC rate
+// n：state
+// Exapl: nNG101000330#
+      VF("MSG:TelStatus: "); VL(TelStatus) ;
+
+
+      char reply[10];
+      
+     memset(reply, (char)0b10000000, 9);
+//  OnStep bit mount code  “:Gu#”    
+    reply[0]=0b10000000;           // 
+if ( TelStatus[0] == 'n') reply[0]|=0b10000001;           // Not tracking
+if ( TelStatus[0] == 'N') reply[0]|=0b10000010;           // No goto
+//  reply[0]|=0b10000100;           // PPS sync
+//  reply[0]|=0b10001000;           // Pulse guide active
+//  reply[0]|=0b11010000;           // Refr enabled Single axis
+//  reply[0]|=0b10010000;           // Refr enabled
+//  reply[0]|=0b11100000;           // OnTrack enabled Single axis
+//  reply[0]|=0b10100000;           // OnTrack enabled
+
+    reply[1]=0b10000000;           // 
+//   reply[1]|=0b10000001;           // Lunar rate selected
+//  reply[1]|=0b10000010;           // Solar rate selected
+//  reply[1]|=0b10000011;           // King rate selected
+//  reply[1]|=0b10000100;           // Sync to encoders only
+if ( TelStatus[0] == 'N')  reply[1]|=0b10001000;           // Guide active
+
+if ( TelStatus[2] == 'H')    reply[2]=0b10000000;           // 
+//  reply[2]|=0b10000001;           // At home
+//  reply[2]|=0b10100000;           // Slewing [h]ome
+//  reply[2]|=0b10000010;           // Waiting at home
+//  reply[2]|=0b10000100;           // Pause at home enabled?
+//  reply[2]|=0b10001000;           // Buzzer enabled?
+//  reply[2]|=0b10010000;           // Auto meridian flip
+
+    reply[3]=0b10000000;           // 
+    reply[3]|=0b10000001;      // GEM
+//  reply[3]|=0b10000010; else      // FORK
+//  reply[3]|=0b10001000;           // ALTAZM
+//  reply[3]|=0b10010000;      // Pier side none
+//  reply[3]|=0b10100000; else      // Pier side east
+   reply[3]|=0b11000000;           // Pier side west
+    
+    
+   reply[4]=0b10000000;           //  
+//  reply[4] = (int)pec.settings.state|0b10000000;       // PEC state: 0 ignore, 1 ready play, 2 playing, 3 ready record, 4 recording
+//  reply[4]|=0b11000000;           // PEC state: data has been recorded
+   reply[5]=0b10000000;           //  
+//  reply[5] = (int)park.state|0b10000000;     // Park state: 0 not parked, 1 parking in-progress, 2 parked, 3 park failed
+
+   reply[6]=0b10000000|1;           //  
+//  reply[6] = (int)guide.settings.pulseRateSelect|0b10000000;                   // Pulse-guide selection
+//    reply[6] = (int)1 | 0b10000000;                   // Pulse-guide selection
+
+    reply[7]=0b10000000|9  ;           //  
+//  reply[7] = (int)guide.settings.axis1RateSelect|0b10000000;                   // Guide selection
+//    reply[7] = (int)16 |0b10000000;                   // Guide selection
+    reply[8]=0b10000000;           //  
+//  reply[8] = limits.errorCode()|0b10000000;                                    // General error
+    reply[9] = 0;
+
+      strcpy(TelStatus, reply) ;
+
 #else
       hasTelStatus = onStep.Get(":Gu#", TelStatus) == CR_VALUE_GET;
 #endif
-      VF("MSG:TelStqtus: "); VL(TelStatus) ;
       if (!hasTelStatus) connected = false;
 
       lastStateTel = millis();

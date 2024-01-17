@@ -34,12 +34,12 @@
 #define ONSTEP1_PASSWORD       "12345678" //  "password", Wifi Station mode password.                                         Adjust
 #define ONSTEP1_IP_ADDR     {192,168,4,1} //  ..168,0,1}, Wifi Target IP Address to connect to.                               Adjust
 
-#define ONSTEP2_HOST_NAME      "" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
-#define ONSTEP2_SSID           "AM3" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
+#define ONSTEP2_HOST_NAME      "EQ5OnStep" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
+#define ONSTEP2_SSID           "OnstepEQ5" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
 #define ONSTEP2_PASSWORD       "12345678" //          "", Wifi alternate Station mode password.                               Adjust
-#define ONSTEP2_IP_ADDR     {192,168,4,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
+#define ONSTEP2_IP_ADDR     {192,168,0,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
 
-#define ONSTEP3_HOST_NAME      "" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
-#define ONSTEP3_SSID           "ASIAIR" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
+#define ONSTEP3_HOST_NAME      " HrEM" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
+#define ONSTEP3_SSID           "OnStepHrEM" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
 #define ONSTEP3_PASSWORD       "12345678" //  "password", Wifi alternate Station mode password.                               Adjust
-#define ONSTEP3_IP_ADDR     {10,0,0,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
+#define ONSTEP3_IP_ADDR     {192,168,0,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
