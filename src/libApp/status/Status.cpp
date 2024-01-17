@@ -56,7 +56,6 @@ void Status::updateTime(boolean immediate) {
 void Status::updateTel(boolean immediate) {
   if (((millis() - lastStateTel > backgroundCommandRate) && connected) || immediate) {
     if (updateSeq%3 == 0 || immediate) {
-
 #if ASI_MOUNT != OFF          
      hasTelStatus = onStep.Get(":GU#", TelStatus) == CR_VALUE_GET;
 // ZWO  Command: “:GU#”
@@ -76,60 +75,76 @@ void Status::updateTel(boolean immediate) {
 // n：DEC rate
 // n：state
 // Exapl: nNG101000330#
+// nG090900992#
       VF("MSG:TelStatus: "); VL(TelStatus) ;
 
 
       char reply[10];
       
-     memset(reply, (char)0b10000000, 9);
-//  OnStep bit mount code  “:Gu#”    
-    reply[0]=0b10000000;           // 
-if ( TelStatus[0] == 'n') reply[0]|=0b10000001;           // Not tracking
-if ( TelStatus[0] == 'N') reply[0]|=0b10000010;           // No goto
+     memset(reply, (char)0b10000000, 9); 
+// NG010000291#
+// nNG000000290#
+// 0123456789
+// OnStep bit mount code  “:Gu#”    
+
+ if ( (TelStatus[2] == 'H')  || (TelStatus[3] == 'H') ) reply[2]|=0b10000001;           // At home
+ if ( (TelStatus[0] == 'n')  && (TelStatus[1] == 'N'))  reply[0]=0b10000011;        // Not tracking
+ if ( (TelStatus[0] == 'n') &&  (TelStatus[1] != 'N') )  reply[0]=0b100000001;       // Goto 
+ if ( (TelStatus[0] == 'n') && ( (TelStatus[3] == '1') || (TelStatus[5] == '1')) )  reply[0]=0b100000000;       // Gudiing
+
+if ( TelStatus[0] == 'N') reply[0]=0b10000010;           // tracking
+if ( TelStatus[0] == 'N' )  reply[1]|=0b10001000;        // Guide active
+
+
 //  reply[0]|=0b10000100;           // PPS sync
 //  reply[0]|=0b10001000;           // Pulse guide active
-//  reply[0]|=0b11010000;           // Refr enabled Single axis
+//  eply[0]|=0b11010000;           // Refr enabled Single axis
 //  reply[0]|=0b10010000;           // Refr enabled
 //  reply[0]|=0b11100000;           // OnTrack enabled Single axis
 //  reply[0]|=0b10100000;           // OnTrack enabled
+//   reply[2]|=0b10100000;      // Slewing [h]ome
 
-    reply[1]=0b10000000;           // 
-//   reply[1]|=0b10000001;           // Lunar rate selected
-//  reply[1]|=0b10000010;           // Solar rate selected
-//  reply[1]|=0b10000011;           // King rate selected
-//  reply[1]|=0b10000100;           // Sync to encoders only
-if ( TelStatus[0] == 'N')  reply[1]|=0b10001000;           // Guide active
 
-if ( TelStatus[2] == 'H')    reply[2]=0b10000000;           // 
-//  reply[2]|=0b10000001;           // At home
-//  reply[2]|=0b10100000;           // Slewing [h]ome
+if ((TelStatus[0] == 'n')  && (TelStatus[1] =='N')) {
+    reply[7] = (int)(TelStatus[10] - 0x30) |0b10000000;          // Guide rate selection
+    }
+else {
+    reply[7] = (int)(TelStatus[9] - 0x30) |0b10000000;          // Guide rate selection
+}
+ //  reply[3]=0b10000000;           // 
+if (( TelStatus[1] == 'G') || ( TelStatus[2] == 'G') || ( TelStatus[3] == 'G'))  reply[3]|=0b10000001;      // GEM
+//  reply[3]|=0b10000010;      // FORK
+if (( TelStatus[1] == 'Z') || ( TelStatus[2] == 'Z') || ( TelStatus[2] == 'Z'))  reply[3]|=0b10001000;     // ALTAZM
+
+    reply[3]|=0b10010000;      // Pier side none
+//  reply[3]|=0b10100000;      // Pier side east
+//  reply[3]|=0b11000000;     // Pier side west
+
 //  reply[2]|=0b10000010;           // Waiting at home
 //  reply[2]|=0b10000100;           // Pause at home enabled?
 //  reply[2]|=0b10001000;           // Buzzer enabled?
 //  reply[2]|=0b10010000;           // Auto meridian flip
 
-    reply[3]=0b10000000;           // 
-    reply[3]|=0b10000001;      // GEM
-//  reply[3]|=0b10000010; else      // FORK
-//  reply[3]|=0b10001000;           // ALTAZM
-//  reply[3]|=0b10010000;      // Pier side none
-//  reply[3]|=0b10100000; else      // Pier side east
-   reply[3]|=0b11000000;           // Pier side west
-    
-    
+ hasTelStatus = onStep.Get(":GT#", TelStatus) == CR_VALUE_GET; 
+    reply[1]=0b10000000;           // 
+if ( TelStatus[0] == '1')   reply[1]|=0b10000001;           // Lunar rate selected
+if ( TelStatus[0] == '2')   reply[1]|=0b10000010;           // Solar rate selected
+//  reply[1]|=0b10000011;           // King rate selected
+//  reply[1]|=0b10000100;           // Sync to encoders only
+
+
+
    reply[4]=0b10000000;           //  
 //  reply[4] = (int)pec.settings.state|0b10000000;       // PEC state: 0 ignore, 1 ready play, 2 playing, 3 ready record, 4 recording
 //  reply[4]|=0b11000000;           // PEC state: data has been recorded
    reply[5]=0b10000000;           //  
 //  reply[5] = (int)park.state|0b10000000;     // Park state: 0 not parked, 1 parking in-progress, 2 parked, 3 park failed
 
-   reply[6]=0b10000000|1;           //  
+   reply[6]=0b10000000;           //  
 //  reply[6] = (int)guide.settings.pulseRateSelect|0b10000000;                   // Pulse-guide selection
 //    reply[6] = (int)1 | 0b10000000;                   // Pulse-guide selection
-
-    reply[7]=0b10000000|9  ;           //  
-//  reply[7] = (int)guide.settings.axis1RateSelect|0b10000000;                   // Guide selection
-//    reply[7] = (int)16 |0b10000000;                   // Guide selection
+//   hasTelStatus = onStep.Get(":Ggr#", TelStatus) == CR_VALUE_GET; 
+    
     reply[8]=0b10000000;           //  
 //  reply[8] = limits.errorCode()|0b10000000;                                    // General error
     reply[9] = 0;
