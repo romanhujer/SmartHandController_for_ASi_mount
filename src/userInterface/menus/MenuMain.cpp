@@ -136,7 +136,11 @@ void UI::menuParking() {
 
   current_selection_L1 = 1;
   while (current_selection_L1 != 0) {
+#if ASI_MOUNT != OFF      
+    const char *string_list_SettingsL1 = L_PARK "\n" ;
+#else
     const char *string_list_SettingsL1 = L_PARK "\n" L_UNPARK "\n" L_SETPARK;
+#endif
     current_selection_L1 = display->UserInterfaceSelectionList(&keyPad, L_PARKING, current_selection_L1, string_list_SettingsL1);
     switch (current_selection_L1) {
       case 1:
@@ -146,6 +150,7 @@ void UI::menuParking() {
           current_selection_L0 = 0;
         } else message.show(L_PARK, L_FAILED, 1000);
       break;
+#if ASI_MOUNT == OFF      
       case 2:
         if (onStep.Set(":hR#")== CR_VALUE_SET) {
           message.show(L_UNPARKING, L_TELESCOPE, 500); 
@@ -163,6 +168,7 @@ void UI::menuParking() {
           } else message.show(L_SETPARK, L_CANCELED, 500);
         } else message.show(L_SETPARK, L_CANCELED, 500);
       break;
+#endif
     }
   }
 }
@@ -174,11 +180,20 @@ void UI::menuTracking() {
     const char *string_list;
     current_selection_L1 = 1;
     while (current_selection_L1 != 0) {
+#if ASI_MOUNT != OFF
+      if (currentstate == Status::TRK_ON) {
+        string_list = L_TRK_STOP "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR;
+      } else {
+        string_list = L_TRK_START "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR;
+      }
+#else
+
       if (currentstate == Status::TRK_ON) {
         string_list = L_TRK_STOP "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR "\n" L_TRK_RESET "\n" L_TRK_FASTER "\n" L_TRK_SLOWER;
       } else {
         string_list = L_TRK_START "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR "\n" L_TRK_RESET "\n" L_TRK_FASTER "\n" L_TRK_SLOWER;
       }
+#endif
       current_selection_L1 = display->UserInterfaceSelectionList(&keyPad, L_TRACKING, current_selection_L1, string_list);
       switch (current_selection_L1) {
         case 1:
@@ -191,20 +206,31 @@ void UI::menuTracking() {
         case 2: message.show(onStep.Set(":TQ#"), false); break;
         case 3: message.show(onStep.Set(":TS#"), false); break;
         case 4: message.show(onStep.Set(":TL#"), false); break;
+#if ASI_MOUNT == OFF        
         case 5: message.show(onStep.Set(":TR#"), false); break;
         case 6: message.show(onStep.Set(":T+#"), false); break;
         case 7: message.show(onStep.Set(":T-#"), false); break;
+#endif
       }
     }
   } else {
     const char *string_list;
     current_selection_L1 = 1;
     while (current_selection_L1 != 0) {
+#if ASI_MOUNT != OFF
+      if (currentstate == Status::TRK_ON) {
+        string_list = L_TRK_STOP "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR;
+      } else {
+        string_list = L_TRK_START "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR;
+      }
+
+#else
       if (currentstate == Status::TRK_ON) {
         string_list = L_TRK_STOP "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR "\n" L_TRK_CF "\n" L_TRK_CR "\n" L_TRK_CO "\n" L_TRK_CS "\n" L_TRK_CD "\n" L_TRK_RESET "\n" L_TRK_FASTER "\n" L_TRK_SLOWER;
       } else {
         string_list = L_TRK_START "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR "\n" L_TRK_CF "\n" L_TRK_CR "\n" L_TRK_CO "\n" L_TRK_CS "\n" L_TRK_CD "\n" L_TRK_RESET "\n" L_TRK_FASTER "\n" L_TRK_SLOWER;
       }
+#endif
       current_selection_L1 = display->UserInterfaceSelectionList(&keyPad, L_TRACKING, current_selection_L1, string_list);
       switch (current_selection_L1) {
         case 1:
@@ -217,6 +243,7 @@ void UI::menuTracking() {
         case 2:  message.show(onStep.Set(":TQ#"), false); break;
         case 3:  message.show(onStep.Set(":TS#"), false); break;
         case 4:  message.show(onStep.Set(":TL#"), false); break;
+#if ASI_MOUNT == OFF        
         case 5:  message.show(onStep.Set(":To#"), false); break;
         case 6:  message.show(onStep.Set(":Tr#"), false); break;
         case 7:  message.show(onStep.Set(":Tn#"), false); break;
@@ -225,6 +252,7 @@ void UI::menuTracking() {
         case 10: message.show(onStep.Set(":TR#"), false); break;
         case 11: message.show(onStep.Set(":T+#"), false); break;
         case 12: message.show(onStep.Set(":T-#"), false); break;
+#endif
       }
     }
   }

@@ -203,14 +203,27 @@ void UI::menuMeridianFlips() {
 void UI::menuSite() {
   current_selection_L2 = 1;
   while (current_selection_L2 != 0) {
+#if ASI_MOUNT  != OFF    
+    const char *string_list_SiteL2 =  L_SET_SITE_LAT "\n" L_SET_SITE_LONG "\n" L_SET_SITE_UTC;
+#else    
     const char *string_list_SiteL2 = L_SET_SITE_SELECT "\n" L_SET_SITE_LAT "\n" L_SET_SITE_LONG "\n" L_SET_SITE_UTC;
+#endif
     current_selection_L2 = display->UserInterfaceSelectionList(&keyPad, L_SET_SITE_TITLE, current_selection_L2, string_list_SiteL2);
+#if ASI_MOUNT  != OFF
+    switch (current_selection_L2) {
+      case 1: menuLatitude(); break;
+      case 2: menuLongitude(); break;
+      case 3: menuZone(); break;
+    }
+
+#else
     switch (current_selection_L2) {
       case 1: menuSites(); break;
       case 2: menuLatitude(); break;
       case 3: menuLongitude(); break;
       case 4: menuZone(); break;
     }
+#endif
   }
 }
 
