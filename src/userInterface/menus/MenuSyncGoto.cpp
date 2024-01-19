@@ -34,8 +34,12 @@ MENU_RESULT UI::menuSyncGoto(bool sync) {
     }
     // add the normal filtering, solarsys, etc. items
     strcat(string_list_gotoL1,L_SG_SOLSYS ">" "\n");
-    if (sync) strcat(string_list_gotoL1,L_SG_HERE ">"); else strcat(string_list_gotoL1,L_SG_USER ">" "\n" L_SG_FILTERS "\n" L_SG_COORDS "\n" L_SG_SPIRAL "\n" L_SG_LAST "\n" L_SG_HOME);
 
+ #if ASI_MOUNT != OFF
+    if (sync) strcat(string_list_gotoL1,L_SG_HERE ">"); else strcat(string_list_gotoL1,L_SG_FILTERS "\n" L_SG_COORDS "\n" L_SG_SPIRAL "\n" L_SG_LAST "\n" L_SG_HOME);
+ #else   
+    if (sync) strcat(string_list_gotoL1,L_SG_HERE ">"); else strcat(string_list_gotoL1,L_SG_USER ">" "\n" L_SG_FILTERS "\n" L_SG_COORDS "\n" L_SG_SPIRAL "\n" L_SG_LAST "\n" L_SG_HOME);
+#endif
     int selection = display->UserInterfaceSelectionList(&keyPad, sync ? L_SG_SYNC : L_SG_GOTO, current_selection, string_list_gotoL1);
     if (selection == 0) return MR_CANCEL;
     current_selection=selection;
@@ -45,6 +49,42 @@ MENU_RESULT UI::menuSyncGoto(bool sync) {
       if (catalogNum >= 0) { if (menuCatalog(sync, catalogNum - 1) == MR_QUIT) return MR_QUIT; } else { if (subMenuSyncGoto(sync,(-catalogNum) - 1) == MR_QUIT) return MR_QUIT; }
     } else
     switch (current_selection-catalog_index_count) {
+ #if ASI_MOUNT != OFF
+      case 1:
+        if (menuSolarSys(sync) == MR_QUIT) return MR_QUIT;
+      break;
+      case 2:
+        menuFilters();
+      break;
+      case 3:
+        if (menuRADec(sync) == MR_QUIT) return MR_QUIT;
+      break;
+      case 4:
+        message.show(L_SG_SPIRAL, "", 2000);
+        onStep.Set(":Mp#");
+        message.show(L_SG_SPIRAL, "...", -1);
+        onStep.Set(":Q#");
+      break;
+      case 5:
+        message.show(L_SG_GOTO_LAST, L_SG_TARGET, 2000);
+        onStep.Move2Target();
+      break;
+      case 6:
+      {
+        bool GotoHome = false;
+        if (display->UserInterfaceInputValueBoolean(&keyPad, L_SG_HOME1 "?", &GotoHome)) {
+          if (GotoHome) {
+            char cmd[5];
+            sprintf(cmd, ":hX#");
+            cmd[2] = sync ? 'F' : 'C';
+            if (onStep.Set(cmd) == CR_VALUE_SET) message.show(sync ? L_SG_HOME2 : L_SG_HOME3, " " L_SG_HOME4, -1);
+            return MR_QUIT;
+          }
+        }
+      }
+      break;
+
+ #else
       case 1:
         if (menuSolarSys(sync) == MR_QUIT) return MR_QUIT;
       break;
@@ -86,7 +126,9 @@ MENU_RESULT UI::menuSyncGoto(bool sync) {
         }
       }
       break;
+#endif      
     }
+
   }
 }
 

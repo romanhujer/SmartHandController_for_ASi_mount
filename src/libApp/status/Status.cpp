@@ -76,7 +76,7 @@ void Status::updateTel(boolean immediate) {
 // n：state
 // Exapl: nNG101000330#
 // nG090900992#
-      VF("MSG:TelStatus: "); VL(TelStatus) ;
+//      VF("MSG:TelStatus: "); VL(TelStatus) ;
 
 
       char reply[10];
@@ -99,6 +99,7 @@ if ( TelStatus[0] == 'N' ) reply[1]|=0b10001000;        // Guide active
 //  reply[0]|=0b10000100;      // PPS sync
 
 if  ( strchr(TelStatus,'t')  || strchr(TelStatus,'T'))  reply[0]|=0b10001000;      // Pulse guide active
+
 //  eply[0]|=0b11010000;       // Refr enabled Single axis
 //  reply[0]|=0b10010000;      // Refr enabled
 //  reply[0]|=0b11100000;      // OnTrack enabled Single axis
@@ -119,11 +120,12 @@ if ( strchr(TelStatus,'G') )  reply[3]|=0b10000001;      // GEM
 
 // if (( TelStatus[1] == 'Z') || ( TelStatus[2] == 'Z') || ( TelStatus[2] == 'Z'))  reply[3]|=0b10001000;     // ALTAZM
 if ( strchr(TelStatus,'Z') )  reply[3]|=0b10001000;     // ALTAZM
-
-
-    reply[3]|=0b10010000;      // Pier side none
-//  reply[3]|=0b10100000;      // Pier side east
-//  reply[3]|=0b11000000;     // Pier side west
+      
+    hasTelStatus = onStep.Get(":Gm#", TelStatus) == CR_VALUE_GET; 
+    VF("MSG:TelStatus: "); VL(TelStatus) ;
+    if ( TelStatus[0] == 'N')  reply[3]|=0b10010000;     // Pier side none (Home)
+    if ( TelStatus[0] == 'E')  reply[3]|=0b10100000;     // Pier side east
+    if ( TelStatus[0] == 'W')  reply[3]|=0b11000000;     // Pier side west
 
 //  reply[2]|=0b10000010;           // Waiting at home
 //  reply[2]|=0b10000100;           // Pause at home enabled?
