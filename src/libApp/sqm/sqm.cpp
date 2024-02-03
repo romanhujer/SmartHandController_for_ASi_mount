@@ -1,9 +1,6 @@
 // -----------------------------------------------------------------------------------------------------------------------------
 // Sky Quality (SQM) related functions
 
-
-#if  SKY_QUAL != OFF  
-
 #include "sqm.h"
 
 #include "../../lib/tasks/OnTask.h"
@@ -16,11 +13,12 @@
 
 extern bool xBusy;
 
+#if  SKY_QUAL != OFF  
 // using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
   #include <Adafruit_TSL2591.h>                                         
   Adafruit_TSL2591 tsl=Adafruit_TSL2591(2591);
 
-
+#endif
 
 void sqmPollWrapper() { sqm.poll(); }
 
@@ -72,7 +70,7 @@ void SQM::poll() {
       tsl.setGain(TSL2591_GAIN_HIGH);
 //      while ( tsl.getFullLuminosity(TSL2591_GFL_WAIT) ) tasks.yield(500);
 //      tsl.getFullLuminosity(TSL2591_GFL_WAIT);
-      tsl.getFullLuminosity();
+//      tsl.getFullLuminosity();
       tasks.yield(500);
 //      lum = tsl.getFullLuminosity(TSL2591_GFL_DONE);
       lum = tsl.getFullLuminosity();
@@ -85,7 +83,7 @@ void SQM::poll() {
 #if 1
       if (visible== 0xFFFF||ir==0xFFFF) {
           tsl.setGain(TSL2591_GAIN_HIGH);
-          tsl.getFullLuminosity();  
+//          tsl.getFullLuminosity();  
           tasks.yield(500);
           lum = tsl.getFullLuminosity();
           ir = lum >> 16;
@@ -94,7 +92,7 @@ void SQM::poll() {
           if (visible == 0xFFFF || ir == 0xFFFF) { // look, dude. It's daylight at this point. Knock it off
               tsl.setGain(TSL2591_GAIN_MED);
               gainscale = MEDSCALE;
-              tsl.getFullLuminosity();
+//              tsl.getFullLuminosity();
               tasks.yield(500);
               lum = tsl.getFullLuminosity();
               ir = lum >> 16;
@@ -103,7 +101,7 @@ void SQM::poll() {
               if (visible == 0xFFFF || ir == 0xFFFF) { // ARE YOU ON THE SUN?
                 tsl.setGain(TSL2591_GAIN_LOW);
                 gainscale = LOWSCALE;
-                tsl.getFullLuminosity();
+//                tsl.getFullLuminosity();
                 tasks.yield(500);
                 lum = tsl.getFullLuminosity();
                 ir = lum >> 16;
@@ -203,4 +201,3 @@ bool SQM::setTemperature(float t) {
 
 SQM sqm;
 
-#endif
