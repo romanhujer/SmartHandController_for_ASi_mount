@@ -258,7 +258,12 @@ void UI::poll() {
       if (buttonCommand) {
         if (activeGuideRate < 4)  activeGuideRate = 4;
         if (activeGuideRate > 10) activeGuideRate = 10;
-        char cmd[5] = ":Rn#"; cmd[2] = '0' + activeGuideRate - 1;
+#if ASI_MOUNT == OFF        
+         char cmd[5] = ":Rn#"; cmd[2] = '0' + activeGuideRate - 1;
+#else
+         char cmd[13] = ":Rn#:Mn#:Qn#"; cmd[2] = '0' + activeGuideRate - 1;     // workaround to update status immediately after rate change, side effect - move in DEC approx 3" at max speed
+#endif
+
         message.show(onStep.Set(cmd));
       }
     break;
