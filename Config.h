@@ -19,7 +19,7 @@
                                           //         The SSD1309 is often used on 1.54" or 2.3" I2C displays.
 
 // ZWO ASI_MOUNT --------------------------------------------------------------------------------------------------------------------
-#define ASI_MOUNT         OFF     // ON or AM5 AM3  OFF
+#define ASI_MOUNT         ON     // ON or AM5 AM3  OFF
 #define ASI_MOUNT_PORT    4030   
 
 // SERIAL PORTS --------------------------------------------------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // WEATHER SENSOR ------------------------------------------------------------------------------------------------------------------
 #define WEATHER                   BME280_0x76 //     OFF //    OFF, BME280 (I2C 0x77,) BME280_0x76, BMP280 (I2C 0x77,) BMP280_0x76           Option
                                           //         BME280 or BMP280 for temperature, pressure.  BME280 for humidity also.
+#define TEMPERATUE_OFFSET           -1.0  //   0.0,  Temperature calibration offset  -5.0 to 5.0 °C                                        
 
 // SQM SENSOR ------------------------------------------------------------------------------------------------------------------
 #define SKY_QUAL              TSL2591  //     OFF   ON  or TSL2591  Support SQM  sensor

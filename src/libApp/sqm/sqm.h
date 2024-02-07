@@ -16,24 +16,25 @@ class SQM {
     float getSQM();
     // set temperature in deg. C
     bool setTemperature(float t);
-   
         
   private:
     SQMSensor sqmSensor = SQMS_NONE;
 
     bool success = false;
     bool active = false; 
-    uint8_t nanCount = 0;
     bool firstSample = true;
+    
+    uint8_t nanCount = 0;
+    uint8_t measurementCount = 0; 
+    
     float sTemperature = NAN;
     float averageMag = 0;  
-  //  float last_mag_per_sq_arcsec = 0;
-    float  mag_per_sq_arcsec = 0;
-    float mag_measurement_I = 0;
-    float mag_measurement_II = 0;
-    float mag_measurement_III = 0;
-    uint8_t  measurementCount = 0; 
+    float mag_per_sq_arcsec = 0;
+    float mag_measurement_0 = 0;
+    float mag_measurement_1 = 0;
+    float mag_measurement_2 = 0;
     unsigned long last_mag_per_sq_arcsec_time = 0;
+
 };
 
 extern SQM sqm;

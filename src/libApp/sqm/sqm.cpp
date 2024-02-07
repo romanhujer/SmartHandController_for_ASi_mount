@@ -2,38 +2,28 @@
 // Sky Quality (SQM) related functions
 
 
-
 #include "sqm.h"
-
 #include "../../lib/tasks/OnTask.h"
-
-//#define LOWSCALE 1.0
-//#define MEDSCALE 25.0
-//#define HIGHSCALE 428.0
-//#define MAXSCALE 9876.0
 
 extern bool xBusy;
 
 // using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
-  #include <Adafruit_TSL2591.h>                                         
-  Adafruit_TSL2591 tsl=Adafruit_TSL2591(2591);
+#include <Adafruit_TSL2591.h>                                         
+Adafruit_TSL2591 tsl=Adafruit_TSL2591(2591);
 
 void sqmPollWrapper() { sqm.poll(); }
 
 bool SQM::init() {
-  #if SKY_QUAL != OFF
     success = false;
       if (tsl.begin()) { 
          sqmSensor = SQMS_TSL2591; 
-         tsl.setGain(TSL2591_GAIN_MAX);
-         tsl.setTiming(TSL2591_INTEGRATIONTIME_600MS);
-        // tsl.setGain(TSL2591_GAIN_MED);                   // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
-        // tsl.setTiming(TSL2591_INTEGRATIONTIME_300MS);    // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
-        success = true; 
+         tsl.setGain(TSL2591_GAIN_MAX);                 // 1x _LOW, 25x _MED, 428x _HIGH, 9876x _MAX (higher gain = more sensitivity)
+         tsl.setTiming(TSL2591_INTEGRATIONTIME_600MS);  // _100MS, _200MS, _300MS, _400MS, _500MS, _600MS (higher integration time = more sensitivity)
+         success = true; 
        } 
       else { 
         DLF("WRN: SQM.init(), TSL2591 not found"); 
-       }
+      }
     
     // follow any I2C device in-library init with a reset of the I2C bus speed
     #ifdef HAL_WIRE_RESET_AFTER_CONNECT
@@ -45,11 +35,7 @@ bool SQM::init() {
     if (success) {
       VF("MSG: SQM, start SQM monitor task (rate !000ms priority 7)... ");
       if (tasks.add(1000, 0, true, 7, sqmPollWrapper, "SQMPoll")) { VLF("success"); } else { VLF("FAILED!"); }
-  
     }
-  #else
-    success = true;
-  #endif
   return success;
 }
 
@@ -58,7 +44,6 @@ void SQM::poll() {
     if (success && !xBusy) {
       // safe-guard to invalidate stale readings after 30 seconds
       if ((long)((last_mag_per_sq_arcsec_time + 60000UL) - millis()) < 0) mag_per_sq_arcsec = NAN;
-
         // read data from TSL2591 (non-blocking)
   uint32_t lum;
 
@@ -94,41 +79,33 @@ void SQM::poll() {
       if (lux > 0) { 
         mag_per_sq_arcsec = SKY_QUAL_ZERO + log10((lux * SKY_QUAL_SCALE)/108000.0)/-0.4;
       }
-      VF("MSG: SQM.poll(), Mag "); VL(mag_per_sq_arcsec);
+ //     VF("MSG: SQM.poll(), Mag "); VL(mag_per_sq_arcsec);
 
       if (isinf(mag_per_sq_arcsec)) {
          mag_per_sq_arcsec = 25;
       }
       
-//      last_mag_per_sq_arcsec = mag_per_sq_arcsec;
       last_mag_per_sq_arcsec_time = millis();
       
-   
-      // apply a 3 sample rolling average to SQM
-      static uint8_t nanCount = 0;
-      static bool firstSample = true;
-      // if (firstSample) {
-      //  firstSample = false;
-      //  averageMag = last_mag_per_sq_arcsec; 
-      // }
-
+     // apply a 3 sample rolling average to SQM
+    
       if (!isnan(mag_per_sq_arcsec)) {
         nanCount = 0;
         if  ( mag_per_sq_arcsec > 0  && mag_per_sq_arcsec < 25  ) {
           if (firstSample) {  
              firstSample = false;
-             mag_measurement_I = mag_per_sq_arcsec;
-             mag_measurement_II = mag_per_sq_arcsec;
-             mag_measurement_III = mag_per_sq_arcsec;
+//             averageMag = mag_per_sq_arcsec; 
+             mag_measurement_0 = mag_per_sq_arcsec;
+             mag_measurement_1 = mag_per_sq_arcsec;
+             mag_measurement_2 = mag_per_sq_arcsec;
           }
-          switch (measurementCount++  % 3) {;
-            case 0: mag_measurement_I =  mag_per_sq_arcsec; break;
-            case 1: mag_measurement_II = mag_per_sq_arcsec; break;
-            case 2: mag_measurement_III = mag_per_sq_arcsec; break;
+          switch (measurementCount++ % 3) {;
+            case 0: mag_measurement_0 = mag_per_sq_arcsec; break;
+            case 1: mag_measurement_1 = mag_per_sq_arcsec; break;
+            case 2: mag_measurement_2 = mag_per_sq_arcsec; break;
           }
-          averageMag = (mag_measurement_I + mag_measurement_II + mag_measurement_III) / 3.0;
-
-//          averageMag = (averageMag*9.0 + last_mag_per_sq_arcsec)/10.0; 
+          averageMag = (mag_measurement_0 + mag_measurement_1 + mag_measurement_2) / 3.0;
+//         averageMag = (averageMag*2.0 + mag_per_sq_arcsec)/3.0; 
         }
       } else {
         if (nanCount < 15) {
@@ -149,7 +126,7 @@ void SQM::poll() {
 
 // get SQM in mas
 float SQM::getSQM() {
- VF("MSG: SQM.getSQM()");  VL( averageMag);
+//  VF("MSG: SQM.getSQM()");  VL( averageMag);
   return averageMag;
 }
 
