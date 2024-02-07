@@ -20,6 +20,7 @@ class OnStepCmd {
     float MyTemperature;
     float MyPressure;
     float MyHumidity;
+    float MyDewPoint;
 #endif
 #if SKY_QUAL != OFF
     float MySQM;

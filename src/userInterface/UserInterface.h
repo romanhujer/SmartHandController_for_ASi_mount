@@ -68,6 +68,10 @@ private:
   #if SERIAL_IP_MODE == STATION
     void menuWifi();
   #endif
+
+  #if SKY_QUAL != OFF
+    void menuSQM();
+  #endif
   
   MENU_RESULT menuSyncGoto(bool sync);
   MENU_RESULT subMenuSyncGoto(char sync, int subMenuNum);

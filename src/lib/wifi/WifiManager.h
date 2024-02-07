@@ -46,8 +46,8 @@ typedef struct StationSettings {
   uint8_t sn[4];
 } StationSettings;
 
-#define WifiStationCount 3
-#define WifiSettingsSize 451
+#define WifiStationCount 4 // 3
+#define WifiSettingsSize 551 // 451
 typedef struct WifiSettings {
   char masterPassword[32];
 
@@ -98,8 +98,13 @@ class WifiManager {
         {
           STA3_HOST_NAME, STA3_SSID, STA3_PASSWORD, STA3_DHCP_ENABLED,
           STA3_TARGET_IP_ADDR, STA3_IP_ADDR, STA3_GW_ADDR, STA3_SN_MASK
+        }, 
+        
+        {
+          STA4_HOST_NAME, STA4_SSID, STA4_PASSWORD, STA4_DHCP_ENABLED,
+          STA4_TARGET_IP_ADDR, STA4_IP_ADDR, STA4_GW_ADDR, STA4_SN_MASK
         }
-
+        
       }
     };
 

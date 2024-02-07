@@ -20,12 +20,19 @@ class SQM {
         
   private:
     SQMSensor sqmSensor = SQMS_NONE;
+
     bool success = false;
-    bool active = false;
+    bool active = false; 
+    uint8_t nanCount = 0;
+    bool firstSample = true;
     float sTemperature = NAN;
-    double mag = 0;
     float averageMag = 0;  
-    float last_mag_per_sq_arcsec = 0;
+  //  float last_mag_per_sq_arcsec = 0;
+    float  mag_per_sq_arcsec = 0;
+    float mag_measurement_I = 0;
+    float mag_measurement_II = 0;
+    float mag_measurement_III = 0;
+    uint8_t  measurementCount = 0; 
     unsigned long last_mag_per_sq_arcsec_time = 0;
 };
 

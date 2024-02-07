@@ -45,4 +45,11 @@
   #define STA3_SSID              ONSTEP3_SSID
   #define STA3_PASSWORD          ONSTEP3_PASSWORD
   #define STA3_TARGET_IP_ADDR    ONSTEP3_IP_ADDR
+
+  #define STA4_DHCP_ENABLED      true
+  #define STA4_HOST_NAME         ONSTEP4_HOST_NAME
+  #define STA4_SSID              ONSTEP4_SSID
+  #define STA4_PASSWORD          ONSTEP4_PASSWORD
+  #define STA4_TARGET_IP_ADDR    ONSTEP4_IP_ADDR
+
 #endif

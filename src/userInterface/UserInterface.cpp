@@ -68,6 +68,8 @@ void UI::init(const char version[], const int pin[7], const int active[7], const
     if (tasks.add(10, 0, true, 1, auxST4Wrapper, "AuxST4")) { VLF("success"); } else { VLF("FAILED!"); }
   #endif
 
+
+
   #if UTILITY_LIGHT != OFF
     #ifdef ESP32
       ledcSetup(0, 5000, 8);
@@ -661,25 +663,25 @@ void UI::updateMainDisplay(u8g2_uint_t page) {
         sprintf(line, "T%s\xb0%s", temp, "C");
         display->DrawFwNumeric(0, y, line);
 
-        sprintf(line, "P%dmb",(int)round(P));
-        display->DrawFwNumeric(dx - display->GetFwNumericWidth(line), y, line);
-
-        y += line_height + 4;
-        sprintf(line, "H%d%%", (int)round(H));
-        display->DrawFwNumeric(0, y, line);
 #if SKY_QUAL != OFF
         if (status.getSQ(SQ)) { 
           dtostrf(SQ, 4, 2, temp);
 //          sprintf(line, "SQ:%s%s", temp, "^");
           sprintf(line, "SQ%s", temp);
-        
         }
 #else
+        sprintf(line, "P%dmb",(int)round(P));
+#endif
+        display->DrawFwNumeric(dx - display->GetFwNumericWidth(line), y, line);
+
+        y += line_height + 4;
+        sprintf(line, "H%d%%", (int)round(H));
+        display->DrawFwNumeric(0, y, line);
+
         dtostrf(DP, 3, 1, temp);
         sprintf(line, "DP%s\xb0%s", temp, "C");
         
-#endif  
-       display->DrawFwNumeric(dx-display->GetFwNumericWidth(line), y, line);      
+        display->DrawFwNumeric(dx-display->GetFwNumericWidth(line), y, line);      
       }
       
       display->setFont(LF_LARGE);
@@ -737,9 +739,16 @@ void UI::connect() {
   int thisTry = 0;
   bool connectSuccess;
 
+
+//  #if SKY_QUAL != OFF
+//     if (firstConnect) menuSQM();
+//  #endif 
+
+
   #if SERIAL_IP_MODE == STATION
     if (firstConnect) menuWifi();
   #endif
+  
 
 initAgain:
   #if SERIAL_IP_MODE == STATION

@@ -60,10 +60,19 @@ void systemServices() {
     static int i = 0;
     char command[80];
 
-    switch (i++ % 3) {
+    switch (i++ % 4) {
+
+#if ASI_MOUNT == OFF
       case 0: onStep.MyTemperature = weather.getTemperature(); sprintF(command, ":SX9A,%0.1f#", onStep.MyTemperature ); onStep.Set(command); break;
       case 1: onStep.MyPressure =  weather.getPressure(); sprintF(command, ":SX9B,%0.1f#", onStep.MyPressure ); onStep.Set(command); break;
       case 2: onStep.MyHumidity = weather.getHumidity(); sprintF(command, ":SX9C,%0.1f#", onStep.MyHumidity ); onStep.Set(command); break;
+      case 3: onStep.MyDewPoint = weather.getDewPoint(); break;
+#else
+      case 0: onStep.MyTemperature = weather.getTemperature();  break;
+      case 1: onStep.MyPressure =  weather.getPressure(); break;
+      case 2: onStep.MyHumidity = weather.getHumidity(); break;
+      case 3: onStep.MyDewPoint = weather.getDewPoint(); break;
+#endif
     }
   }
 #endif
@@ -108,13 +117,11 @@ void setup(void) {
   
   #if SKY_QUAL != OFF
     // get SQM
-     sqm.init();
+    sqm.init();
     // add task to forward readings to OnStep
-    VF("MSG: Setup, starting SQM services task (rate 9999ms priority 7)... ");
-    if (tasks.add(9999, 0, true, 7, sqmServices, "sqmSvcs")) { VL("success"); } else { VL("FAILED!"); }
+    VF("MSG: Setup, starting SQM services task (rate 6666ms priority 7)... ");
+    if (tasks.add(6666, 0, true, 7, sqmServices, "sqmSvcs")) { VL("success"); } else { VL("FAILED!"); }
   #endif
-
-
 
   // start task manager debug events
   #if DEBUG == PROFILER

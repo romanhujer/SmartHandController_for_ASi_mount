@@ -3,8 +3,11 @@ Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/Sma
 
 
 NOTE:
-! ! !  A L P H A  -  V E R S I O N  _ N O T _ W O R K I N G  _  N O W  ! ! ! 
+! ! !  A L P H A  _  V E R S I O N  _  P A R T I A L L Y _  W O R K I N G_  N O W  ! ! ! 
 
+For SQM with TSL2591 sensor need using customized library. Download from  https://github.com/hjd1964/Adafruit_TSL2591_Library 
+
+For SQM V1.0 with TSL2591 sensor need using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
 
 The SHC adds dedicated hand controller functionality to an OnStep or OnStepX telescope controller. 
 This firmware is designed to run on ESP32 (recommended) or Teensy3.2 or Teensy4.0 hardware.

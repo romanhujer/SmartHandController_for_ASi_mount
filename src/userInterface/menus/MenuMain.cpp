@@ -2,12 +2,21 @@
 // MenuMain, for UserInterface
 #include "../UserInterface.h"
 
+
+#if SKY_QUAL != OFF
+  void UI::menuSQM() {
+  static unsigned short current_selection_sqm = 1;  
+  
+  }
+#endif
+
+
 #if SERIAL_IP_MODE == STATION
   void UI::menuWifi() {
     static unsigned short current_selection_wifi = 1;
 
     int wifiCount = 0;
-    char host_list[40];
+    char host_list[60];
     strcpy(host_list, "");
     if (strlen(STA1_HOST_NAME) != 0) {
       wifiCount++;
@@ -20,6 +29,11 @@
           wifiCount++;
           strcat(host_list, "\n");
           strncat(host_list, STA3_HOST_NAME, 16);
+          if (strlen(STA4_HOST_NAME) != 0) {
+            wifiCount++;
+            strcat(host_list, "\n");
+            strncat(host_list, STA4_HOST_NAME, 16);
+          }          
         }
       }
     }
@@ -137,9 +151,9 @@ void UI::menuParking() {
   current_selection_L1 = 1;
   while (current_selection_L1 != 0) {
 #if ASI_MOUNT != OFF      
-    const char *string_list_SettingsL1 = L_PARK "\n" ;
+    const char *string_list_SettingsL1 = L_PARK  "\n"  L_SG_HOME1 ;
 #else
-    const char *string_list_SettingsL1 = L_PARK "\n" L_UNPARK "\n" L_SETPARK;
+    const char *string_list_SettingsL1 = L_PARK  "\n"  L_SG_HOME1 "\n" L_UNPARK "\n"   L_SETPARK ;
 #endif
     current_selection_L1 = display->UserInterfaceSelectionList(&keyPad, L_PARKING, current_selection_L1, string_list_SettingsL1);
     switch (current_selection_L1) {
@@ -150,14 +164,21 @@ void UI::menuParking() {
           current_selection_L0 = 0;
         } else message.show(L_PARK, L_FAILED, 1000);
       break;
-#if ASI_MOUNT == OFF      
       case 2:
+        if (onStep.Set(":hC#")== CR_VALUE_SET) {
+          message.show(L_SG_HOME1, L_TELESCOPE, 500); 
+          current_selection_L1 = 0;
+          current_selection_L0 = 0;
+        } else message.show(L_SG_HOME1, L_FAILED, 1000);
+      break;
+#if ASI_MOUNT == OFF      
+      case 3:
         if (onStep.Set(":hR#")== CR_VALUE_SET) {
           message.show(L_UNPARKING, L_TELESCOPE, 500); 
           current_selection_L1 = 0;
         } else message.show(L_UNPARK, L_FAILED, 1000);
       break;
-      case 3: 
+      case 4: 
         boolean SetP=false; 
         if (display->UserInterfaceInputValueBoolean(&keyPad, L_SETPARK "?", &SetP)) {
           if (SetP) {
@@ -223,7 +244,6 @@ void UI::menuTracking() {
       } else {
         string_list = L_TRK_START "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR;
       }
-
 #else
       if (currentstate == Status::TRK_ON) {
         string_list = L_TRK_STOP "\n" L_TRK_SIDEREAL "\n" L_TRK_SOLAR "\n" L_TRK_LUNAR "\n" L_TRK_CF "\n" L_TRK_CR "\n" L_TRK_CO "\n" L_TRK_CS "\n" L_TRK_CD "\n" L_TRK_RESET "\n" L_TRK_FASTER "\n" L_TRK_SLOWER;

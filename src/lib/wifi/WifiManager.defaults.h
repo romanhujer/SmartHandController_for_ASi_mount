@@ -216,3 +216,38 @@
 #define STA3_SN_MASK       {255,255,255,0} // Wifi Station SUBNET Mask
 #endif
 
+// next alternate station
+
+#ifndef STA4_HOST_NAME
+#define STA4_HOST_NAME                  "" // Wifi Host Name to connect to
+#endif
+
+#ifndef STA4_SSID
+#define STA4_SSID                       "" // Wifi Station SSID to connnect to
+#endif
+
+#ifndef STA4_PASSWORD
+#define STA4_PASSWORD           "password" // Wifi Station mode password
+#endif
+
+#ifndef STA4_DHCP_ENABLED
+#define STA4_DHCP_ENABLED           false  // true to use LAN DHCP addresses
+#endif
+
+#ifndef STA4_TARGET_IP_ADDR 
+#define STA4_TARGET_IP_ADDR  {192,168,0,1} // IP Address to connect to (OnStep for example)
+#endif
+
+#ifndef STA4_IP_ADDR
+#define STA4_IP_ADDR         {192,168,0,2} // Wifi Station IP Address
+#endif
+
+#ifndef STA4_GW_ADDR
+#define STA4_GW_ADDR         {192,168,0,1} // Wifi Station GATEWAY Address
+#endif
+
+#ifndef STA4_SN_MASK
+#define STA4_SN_MASK       {255,255,255,0} // Wifi Station SUBNET Mask
+#endif
+
+

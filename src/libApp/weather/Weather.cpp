@@ -160,9 +160,9 @@ bool Weather::setHumidity(float h) {
 // get dew point in deg. C
 // accurate to +/- 1 deg. C for RH above 50%
 float Weather::getDewPoint() {
-  return averageTemperature - ((100.0 - humidity) / 5.0);
+  //return averageTemperature - ((100.0 - humidity) / 5.0);
   // a more accurate formula?
-  // return 243.04*(log(humidity/100.0) + ((17.625*averageTemperature)/(243.04 + averageTemperature)))/(17.625 - log(humidity/100.0) - ((17.625*averageTemperature)/(243.04 + averageTemperature)));
+  return 243.04*(log(humidity/100.0) + ((17.625*averageTemperature)/(243.04 + averageTemperature)))/(17.625 - log(humidity/100.0) - ((17.625*averageTemperature)/(243.04 + averageTemperature)));
 }
 
 Weather weather;

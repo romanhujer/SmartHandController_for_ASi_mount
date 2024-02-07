@@ -438,17 +438,21 @@ bool Status::getT(double &T) {
   static double f = 0;
   static bool hasValue = false;
   static unsigned long last = 0;
+
+#if WEATHER == OFF
   if ((millis() - last > 30000) || !hasValue)
     if (onStep.Get(":GX9A#", temp) == CR_VALUE_GET) 
     {
       int l = strlen(temp); if (l > 0) temp[l - 1] = 0;
       f = atof(temp);
-
-#if WEATHER != OFF
-      f = onStep.MyTemperature;
-#endif 
       if (f >= -50.0 && f <= 100.0) { last = millis(); hasValue = true; }
     }
+#else 
+    if ((millis() - last > 30000) || !hasValue) {
+      f = onStep.MyTemperature;
+      if (f >= -50.0 && f <= 100.0) { last = millis(); hasValue = true; }
+    }
+#endif
   if (hasValue) { T = f; return true; } else return false;
 };
 
@@ -457,16 +461,20 @@ bool Status::getP(double &P) {
   static double f = 0;
   static bool hasValue = false;
   static unsigned long last = 0;
+#if WEATHER == OFF
   if ((millis() - last > 75000) || !hasValue)
     if (onStep.Get(":GX9B#", temp) == CR_VALUE_GET) 
     {
       int l=strlen(temp); if (l > 0) temp[l - 1] = 0;
       f = atof(temp);
-#if WEATHER != OFF
-      f = onStep.MyPressure;
-#endif 
       if (f >= 500.0 && f <= 2000.0) { last = millis(); hasValue = true; }
     }
+#else 
+   if ((millis() - last > 75000) || !hasValue){
+      f = onStep.MyPressure;
+      if (f >= 500.0 && f <= 2000.0) { last = millis(); hasValue = true; }
+   }  
+#endif 
   if (hasValue) { P = f; return true; } else return false;
 };
 
@@ -475,16 +483,20 @@ bool Status::getH(double &H) {
   static double f = 0;
   static bool hasValue = false;
   static unsigned long last = 0;
+#if WEATHER == OFF
   if ((millis()-last > 75000) || !hasValue)
     if (onStep.Get(":GX9C#", temp) == CR_VALUE_GET) 
     {
       int l = strlen(temp); if (l > 0) temp[l - 1] = 0;
       f = atof(temp);
-#if WEATHER != OFF
-      f = onStep.MyHumidity;
-#endif 
       if (f >= 0.0 && f <= 100.0) { last = millis(); hasValue = true; }
     }
+#else
+   if ((millis()-last > 75000) || !hasValue) {
+      f = onStep.MyHumidity;
+      if (f >= 0.0 && f <= 100.0) { last = millis(); hasValue = true; }
+   }
+#endif 
   if (hasValue) { H = f; return true; } else return false;
 };
 
@@ -493,6 +505,7 @@ bool Status::getDP(double &DP) {
   static double f = 0;
   static bool hasValue = false;
   static unsigned long last = 0;
+#if WEATHER == OFF  
   if ((millis() - last > 30000) || !hasValue)
     if (onStep.Get(":GX9E#", temp) == CR_VALUE_GET) 
     {
@@ -500,6 +513,12 @@ bool Status::getDP(double &DP) {
       f = atof(temp);
       if (f >= -50.0 && f <= 100.0) { last = millis(); hasValue = true; }
     }
+#else
+  if ((millis() - last > 30000) || !hasValue) {
+     f = onStep.MyDewPoint;
+     if (f >= -50.0 && f <= 100.0) { last = millis(); hasValue = true; }
+  }
+#endif  
   if (hasValue) { DP = f; return true; } else return false;
 };
 
