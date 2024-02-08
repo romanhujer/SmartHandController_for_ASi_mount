@@ -740,9 +740,9 @@ void UI::connect() {
   bool connectSuccess;
 
 
-//  #if SKY_QUAL != OFF
+#if SKY_QUAL != OFF
 //     if (firstConnect) menuSQM();
-//  #endif 
+#endif 
 
 
   #if SERIAL_IP_MODE == STATION

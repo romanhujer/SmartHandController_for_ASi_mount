@@ -120,7 +120,7 @@ void Weather::poll() {
 
 // get temperature in deg. C
 float Weather::getTemperature() {
-  return averageTemperature  + TEMPERATUE_OFFSET ;
+  return averageTemperature  + TEMPERATURE_OFFSET ;
 }
 
 // set temperature in deg. C
