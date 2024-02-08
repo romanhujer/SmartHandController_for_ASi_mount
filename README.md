@@ -5,6 +5,21 @@ Mofifikaction from [OnStep Smart Hand Controller](https://github.com/hjd1964/Sma
 NOTE:
 ! ! !  A L P H A  _  V E R S I O N  _  P A R T I A L L Y _  W O R K I N G_  N O W  ! ! ! 
 
+Currently most things are already working:
+- Setting date, time and location
+- tracking on and off 
+- switching the tracking speed (sideric lunar and solar)
+- Setting speed and guiding with cross buttons
+- Goto to objects from internal catalogue
+- Goto home and parking 
+
+Alignment to stars and sync is not working  now.  :-(
+
+
+
+
+
+
 For SQM with TSL2591 sensor need using customized library. Download from  https://github.com/hjd1964/Adafruit_TSL2591_Library 
 
 For SQM V1.0 with TSL2591 sensor need using customized library from https://github.com/hjd1964/Adafruit_TSL2591_Library 
