@@ -35,7 +35,7 @@
 // WEATHER SENSOR ------------------------------------------------------------------------------------------------------------------
 #define WEATHER                   BME280_0x76 //     OFF //    OFF, BME280 (I2C 0x77,) BME280_0x76, BMP280 (I2C 0x77,) BMP280_0x76           Option
                                           //         BME280 or BMP280 for temperature, pressure.  BME280 for humidity also.
-#define TEMPERATUE_OFFSET           -1.0  //   0.0,  Temperature calibration offset  -5.0 to 5.0 °C                                        
+#define TEMPERATURE_OFFSET           -1.0  //   0.0,  Temperature calibration offset  -5.0 to 5.0 °C                                        
 
 // SQM SENSOR ------------------------------------------------------------------------------------------------------------------
 #define SKY_QUAL              TSL2591  //     OFF   ON  or TSL2591  Support SQM  sensor
