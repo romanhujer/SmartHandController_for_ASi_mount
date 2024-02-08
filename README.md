@@ -18,7 +18,11 @@ Alignment to stars and sync is not working  now.  :-(
 ========================================================
 
 
+
 For SQM with TSL2591 sensor need using customized library. Download from  https://github.com/hjd1964/Adafruit_TSL2591_Library 
+SQM is support only my PCB https://oshwlab.com/hujer.roman/wireless-shc
+
+For Ephemeris Library download from https://github.com/hjd1964/ephemeris
 
 The SHC adds dedicated hand controller functionality to an OnStep or OnStepX telescope controller. 
 This firmware is designed to run on ESP32 (recommended) or Teensy3.2 or Teensy4.0 hardware.
