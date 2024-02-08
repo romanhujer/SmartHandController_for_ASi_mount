@@ -15,12 +15,12 @@ Currently most things are already working:
 
 Alignment to stars and sync is not working  now.  :-(
 
-========================================================
-
-
+========================================================================
 
 For SQM with TSL2591 sensor need using customized library. Download from  https://github.com/hjd1964/Adafruit_TSL2591_Library 
+
 SQM is support only my PCB https://oshwlab.com/hujer.roman/wireless-shc
+=========================================================================
 
 For Ephemeris Library download from https://github.com/hjd1964/ephemeris
 
