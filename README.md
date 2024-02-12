@@ -15,6 +15,8 @@ Currently most things are already working:
 
 Alignment to stars and sync is not working  now.  :-(
 
+add  RTC DS3231M+
+
 ============================================================
 
 For SQM with TSL2591 sensor need using customized library. Download from  https://github.com/hjd1964/Adafruit_TSL2591_Library 
