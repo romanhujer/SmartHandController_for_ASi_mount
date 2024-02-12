@@ -3,9 +3,12 @@
 // uses the specified serial port
 #pragma once
 
+
+
 #include "../../Common.h"
 
-#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == GPS
+// #if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == GPS
+#if 0
 
 #include "../calendars/Calendars.h"
 

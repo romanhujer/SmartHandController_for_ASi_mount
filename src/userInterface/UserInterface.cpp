@@ -258,7 +258,11 @@ void UI::poll() {
       if (keyPad.F->wasPressed()) { activeGuideRate--; message.brief(L_FKEY_GUIDE_DN); buttonCommand = true; } else
       if (keyPad.f->wasPressed()) { activeGuideRate++; message.brief(L_FKEY_GUIDE_UP); buttonCommand = true; }
       if (buttonCommand) {
+#if ASI_MOUNT  == OFF
         if (activeGuideRate < 4)  activeGuideRate = 4;
+#else        
+        if (activeGuideRate < 1)  activeGuideRate = 1;
+#endif
         if (activeGuideRate > 10) activeGuideRate = 10;
 #if ASI_MOUNT == OFF        
          char cmd[5] = ":Rn#"; cmd[2] = '0' + activeGuideRate - 1;
@@ -270,8 +274,10 @@ void UI::poll() {
       }
     break;
 
+
     // adjust pulse guide rate
     case 2:
+#if ASI_MOUNT == OFF
       if (keyPad.F->wasPressed()) { activeGuideRate--; message.brief(L_FKEY_PGUIDE_DN); buttonCommand = true; } else
       if (keyPad.f->wasPressed()) { activeGuideRate++; message.brief(L_FKEY_PGUIDE_UP); buttonCommand = true; }
       if (buttonCommand) {
@@ -280,7 +286,9 @@ void UI::poll() {
         char cmd[5] =  ":Rn#"; cmd[2] = '0' + activeGuideRate - 1;
         message.show(onStep.Set(cmd));
       }
+#endif          
     break;
+
 
     // util. light
     case 3:
@@ -302,8 +310,10 @@ void UI::poll() {
 
     // reticle
     case 4:
+#if ASI_MOUNT == OFF
       if (keyPad.F->wasPressed()) { SERIAL_ONSTEP.print(":B-#"); message.brief(L_FKEY_RETI_DN); } else
       if (keyPad.f->wasPressed()) { SERIAL_ONSTEP.print(":B+#"); message.brief(L_FKEY_RETI_UP); }
+#endif          
     break;
 
     // rotator
@@ -490,17 +500,31 @@ void UI::updateMainDisplay(u8g2_uint_t page) {
 
       // update guide rate (if available)
       if (status.getGuideRate() >= 0) {
+#if ASI_MOUNT == OFF
         char string_Speed[][8] = {"¼x","½x","1x","2x","4x","8x","20x","48x","½Mx","Max"};
         char string_PSpeed[][6] = {" ¼x"," ½x"," 1x"};
         int gr = status.getGuideRate();
         activeGuideRate = gr + 1;
-        int pgr = status.getPulseGuideRate();
+        int pgr = status.getPulseGuideRate();        
         if (pgr != gr && pgr >= 0 && pgr < 3) strcat(string_Speed[gr], string_PSpeed[pgr]); 
         if (gr >= 0 && gr <= 9) {
           display->setFont(LF_STANDARD);
           display->drawUTF8(0, icon_height - 2, string_Speed[gr]);
           display->setFont(LF_LARGE);
         }
+#else
+        char string_Speed[][8] = {"¼x","½x","1x","2x","4x","8x","20x","60x","½Mx","Max"};
+//        char string_PSpeed[][6] = {" ¼x"," ½x"," 1x"};
+        int gr = status.getGuideRate();
+        activeGuideRate = gr + 1;
+//        int pgr = status.getPulseGuideRate();        
+//        if (pgr != gr && pgr >= 0 && pgr < 3) strcat(string_Speed[gr], string_PSpeed[pgr]); 
+        if (gr >= 0 && gr <= 9) {
+          display->setFont(LF_STANDARD);
+          display->drawUTF8(0, icon_height - 2, string_Speed[gr]);
+          display->setFont(LF_LARGE);
+        }
+#endif
       }
 
       Status::ParkState curP = status.getParkState();
@@ -741,7 +765,7 @@ void UI::connect() {
 
 
 #if SKY_QUAL != OFF
-//     if (firstConnect) menuSQM();
+     if (firstConnect) menuSQM();
 #endif 
 
 
@@ -810,7 +834,7 @@ queryAgain:
 
   CMD_RESULT r = onStep.Get(":GVP#", s);
   VF("MSG: :GVP# "); VL(s); 
-  if (r != CR_VALUE_GET || !(strstr(s, "On-Step") || strstr(s, "AM5") || strstr(s, "AM3"))) {
+  if (r != CR_VALUE_GET || !(strstr(s, "On-Step") || strstr(s, "AM5") || strstr(s, "AM3")|| strstr(s, "indigo"))) {
     if (++thisTry % 5 != 0) {
       goto queryAgain;
     } else {

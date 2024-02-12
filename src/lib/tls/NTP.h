@@ -5,7 +5,8 @@
 
 #include "../../Common.h"
 
-#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == NTP
+#if 0
+//#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == NTP
 
 #if OPERATIONAL_MODE == WIFI
   #include <WiFiUdp.h>

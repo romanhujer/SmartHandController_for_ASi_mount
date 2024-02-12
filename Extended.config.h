@@ -60,10 +60,10 @@
  #define ONSTEP2_PASSWORD       "12345678" //          "", Wifi alternate Station mode password.                               Adjust
  #define ONSTEP2_IP_ADDR     {10,0,0,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
 
- #define ONSTEP3_HOST_NAME      "" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
- #define ONSTEP3_SSID           "OnStep" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
- #define ONSTEP3_PASSWORD       "12345678" //  "password", Wifi alternate Station mode password.                               Adjust
- #define ONSTEP3_IP_ADDR     {192,168,0,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
+ #define ONSTEP3_HOST_NAME      "IndigoSky" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
+ #define ONSTEP3_SSID           "indigosky" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust
+ #define ONSTEP3_PASSWORD       "indigosky" //  "password", Wifi alternate Station mode password.                               Adjust
+ #define ONSTEP3_IP_ADDR     {192,168,235,1} //  ..168,0,1}, Wifi alternate Target IP Address to connect to.                     Adjust
 
  #define ONSTEP4_HOST_NAME      "" //          "", Wifi Host Name to connnect to, leave blank to disable.              Adjust
  #define ONSTEP4_SSID           "OnStepX" //    "ONSTEP", Wifi alternate Station SSID to connnect to.                         Adjust

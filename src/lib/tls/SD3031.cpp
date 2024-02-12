@@ -4,7 +4,8 @@
 
 #include "SD3031.h"
 
-#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == SD3031
+//#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == SD3031
+#if 0
 
 #ifdef TLS_TIMELIB
   #include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip

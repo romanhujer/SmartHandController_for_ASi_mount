@@ -4,7 +4,8 @@
 
 #include "../../Common.h"
 
-#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == TEENSY
+#if 0
+//#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == TEENSY
 
 #include "../calendars/Calendars.h"
 

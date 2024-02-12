@@ -4,7 +4,7 @@
 
 #include "DS3231.h"
 
-#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == DS3231
+#if defined(TIME_LOCATION_SOURCE) && (TIME_LOCATION_SOURCE == DS3231)
 
 #ifdef TLS_TIMELIB
   #include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip
@@ -13,7 +13,6 @@
 #include <Wire.h>
 #include <RtcDS3231.h> // https://github.com/Makuna/Rtc/archive/master.zip
 RtcDS3231<TwoWire> rtcDS3231(HAL_Wire);
-
 bool TimeLocationSource::init() {
   HAL_Wire.begin();
   HAL_Wire.setClock(HAL_WIRE_CLOCK);
