@@ -16,7 +16,7 @@ Currently most things are already working:
 - NEW add support LOCAL_RTC width I2C DS3231MZ+ chip
 
 
-Alignment to stars and sync is not working  now.  :-(
+Alignment to stars and sync is not working now.  
 
 
 
