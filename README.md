@@ -13,9 +13,12 @@ Currently most things are already working:
 - Goto to objects from internal catalogue
 - Goto home and parking 
 
+- NEW add support LOCAL_RTC width I2C DS3231MZ+ chip
+
+
 Alignment to stars and sync is not working  now.  :-(
 
-add  RTC DS3231M+
+
 
 ============================================================
 

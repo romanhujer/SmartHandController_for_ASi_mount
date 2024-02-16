@@ -5,6 +5,10 @@ extern NVS nv;
 
 #include "../../lib/convert/Convert.h"
 
+#if  LOCAL_RTC != OFF       
+  #include "../../libApp/rtc/rtc.h"
+#endif
+
 void UI::menuSettings() {
   current_selection_L1 = 1;
   while (current_selection_L1 != 0) {
@@ -77,6 +81,7 @@ void UI::menuLocalDateTime() {
     uint8_t month = strtol(&out[0], &pEnd, 10);
     uint8_t day = strtol(&out[3], &pEnd, 10);
     uint8_t year = strtol(&out[6], &pEnd, 10);
+    long newTime; //Time
     if (display->UserInterfaceInputValueDate(&keyPad, L_SET_LOCAL_DATE, year, month, day)) {
       sprintf(out, ":SC%02d/%02d/%02d#", month, day, year); message.show(onStep.Set(out),false);
       // Time
@@ -90,10 +95,22 @@ void UI::menuLocalDateTime() {
             if (pmf) value+=43200; // AM or PM?
             if (display->UserInterfaceInputValueBoolean(&keyPad, L_SET_LOCAL_DST "?", &dst)) {
               if (dst) value-=3600; // Dst?
+              newTime = value;
               message.show(onStep.SetTime(value),false);
             }
           }
-        }
+       }
+#if LOCAL_RTC != OFF 
+      int hour = int(newTime / 3600);
+      int minute = int((newTime - hour * 3600)/60);  
+      int second =  newTime - hour * 3600 - minute * 60;        
+#if DEBUG != OFF
+      char s[30];
+      sprintf(s,"%4d-%02d-%02d %02d:%02d:%02d", year, month ,day, hour, minute, second );
+      VF("MSG: Update time/date" ); VL(s);  
+#endif
+       Rtc.set(year+2000, month, day, hour, minute, second);
+#endif
       }
     }
   }

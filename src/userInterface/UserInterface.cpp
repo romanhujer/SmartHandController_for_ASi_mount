@@ -10,6 +10,12 @@ extern NVS nv;
 #include "../catalogs/Catalog.h"
 #include "bitmaps/Bitmaps.h"
 
+
+
+#if LOCAL_RTC != OFF
+  #include "../libApp/rtc/rtc.h"
+#endif
+
 bool xBusy = false;
 
 void updateWrapper() { userInterface.poll(); }
@@ -45,6 +51,11 @@ void UI::init(const char version[], const int pin[7], const int active[7], const
     nv.wait();
     if (!nv.isKeyValid(INIT_NV_KEY)) { DLF("ERR: NV, failed to read back key!"); } else { VLF("MSG: NV, reset complete"); }
   }
+
+  #if LOCAL_RTC != OFF
+      Rtc.init();
+      VLF("MSG: Rtc.init() RTC ");    
+  #endif
 
   if (strlen(version) <= 19) strcpy(_version, version);
 
@@ -764,9 +775,9 @@ void UI::connect() {
   bool connectSuccess;
 
 
-#if SKY_QUAL != OFF
-     if (firstConnect) menuSQM();
-#endif 
+//#if SKY_QUAL != OFF
+//     if (firstConnect) menuSQM();
+//#endif 
 
 
   #if SERIAL_IP_MODE == STATION
@@ -847,8 +858,56 @@ queryAgain:
       goto initAgain;
     }
   }
+  VF("MSG: Connect, found ");  VL(s); 
 
-  VLF("MSG: Connect, found OnStep");
+// Check and set mount  time/date from RTC
+#if LOCAL_RTC != OFF
+  if ( Rtc.isReady()) {
+   rtcTimeDate rtd, mtd;
+   long rDate,mDate,rTime,mTime;
+   rtd = Rtc.get();
+   sprintf(s,"%4d-%02d-%02d ", rtd.year, rtd.month, rtd.day);
+   VF("MSG: Rtc.get() Date: "); VL(s); 
+   sprintf(s,"%02d:%02d:%02d ", rtd.hour, rtd.minute , rtd.second);
+   VF("MSG: Rtc.get() Time: "); VL(s); 
+   if  ( !rtd.valid || rtd.year < 2024 || rtd.year > 3000 ) {       
+        VLF("MSG: Set Time/Date: 2024-01-01 00:00:00");
+        Rtc.set(2024, 1, 1, 0, 0, 0);
+        rtd = Rtc.get();
+   }
+   rtd.year = rtd.year - 2000;
+   rDate = long(rtd.day) + long(rtd.month) * 100L + long(rtd.year) * 10000L;
+   rTime = long(rtd.hour) + long(rtd.minute) * 100L + long(rtd.second) * 10000L;
+   VLF("MSG: Get mount date & time");
+   r = onStep.Get(":GC#", s );
+   VF("MSG: Mount Date: "); VL(s); 
+   char* pEnd;
+   mtd.month = strtol(&s[0], &pEnd, 10);
+   mtd.day = strtol(&s[3], &pEnd, 10);
+   mtd.year = strtol(&s[6], &pEnd, 10);
+   mDate = long(mtd.day)  + long(mtd.month) * 100L + long(mtd.year) * 10000L;
+   r = onStep.Get(":GL#", s );
+   VF("MSG: Mount Time: "); VL(s); 
+   mtd.hour = strtol(&s[0], &pEnd, 10);
+   mtd.minute = strtol(&s[3], &pEnd, 10);
+   mtd.second = strtol(&s[3], &pEnd, 10);
+   rTime = long(mtd.hour) + long(mtd.minute) * 100L + long(mtd.second) * 10000L;
+   if (mDate < rDate) {
+    VLF("MSG: Moute time & date is less than RTC set mount time & date)");
+    sprintf(s, ":SC%02d/%02d/%02d#", rtd.month, rtd.day, rtd.year); onStep.Set(s);
+    sprintf(s, ":SL%02d:%02d!%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
+   } 
+   else if ((mDate == rDate) && (mTime < rTime)) {
+     VLF("MSG: Moute time is less than RTC set mount time");
+     sprintf(s, ":SL%02d:%02d!%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
+    }
+    else {
+      VLF("MSG: Moute time is greater than RTC sync RTC time");
+      Rtc.set(mtd.year+2000, mtd.month, mtd.day, mtd.hour, mtd.minute, mtd.second);
+    }
+  }
+  else  { DLF("MSG:  RTC not Ready");}
+#endif // end of LOCAL_RTC
 
 again2:
   delay(1000);
@@ -898,5 +957,4 @@ again2:
 #endif
   status.connected = true;
 }
-
 UI userInterface;

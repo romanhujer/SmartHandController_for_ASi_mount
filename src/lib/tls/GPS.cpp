@@ -2,13 +2,9 @@
 // Time/Location source GPS support
 // uses the specified serial port
 
-
-
 #include "GPS.h"
 
-//#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == GPS
-#if  0
-
+#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == GPS
 
 #ifdef TLS_TIMELIB
   #include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip

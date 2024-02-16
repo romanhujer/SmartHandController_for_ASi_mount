@@ -19,7 +19,7 @@
                                           //         The SSD1309 is often used on 1.54" or 2.3" I2C displays.
 
 // ZWO ASI_MOUNT --------------------------------------------------------------------------------------------------------------------
-#define ASI_MOUNT        ON// ON or AM5 AM3  OFF
+#define ASI_MOUNT        OFF// ON or AM5 AM3  OFF
 #define ASI_MOUNT_PORT    4030   
 
 // SERIAL PORTS --------------------------------------------------------------------------------------------------------------------
@@ -43,8 +43,8 @@
 #define SKY_QUAL_SCALE        1.0 //    1.0, n. Where n=-0.5 to 1.5 (x) sensitivity scale factor
 
 
-// TIME AND LOCATION ---------------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration_Mount#TLS
-#define TIME_LOCATION_SOURCE      OFF // DS3231 //    OFF, DS3231 (I2C,) SD3031 (I2C,) TEENSY (T3.2 etc,) GPS, or NTP source.       Option
+// Local Realt Timec
+#define LOCAL_RTC            DS3231 //    OFF, DS3231 (I2C,)  Option
                                           //         Provides Date/Time
 
 

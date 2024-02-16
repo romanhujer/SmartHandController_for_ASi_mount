@@ -4,8 +4,8 @@
 
 #include "NTP.h"
 
-// #if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == NTP
-#if 0
+#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == NTP
+
 #include <TimeLib.h> // https://github.com/PaulStoffregen/Time/archive/master.zip
 
 #if OPERATIONAL_MODE == WIFI

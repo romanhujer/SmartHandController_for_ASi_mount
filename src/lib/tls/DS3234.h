@@ -5,8 +5,7 @@
 
 #include "../../Common.h"
 
-//#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == DS3234
-#if 0
+#if defined(TIME_LOCATION_SOURCE) && TIME_LOCATION_SOURCE == DS3234
 
 #include "../calendars/Calendars.h"
 

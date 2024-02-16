@@ -30,7 +30,7 @@
 #define Product               "SHC"
 #define FirmwareVersionMajor  "4"
 #define FirmwareVersionMinor  "01"
-#define FirmwareVersionPatch  "b"
+#define FirmwareVersionPatch  "RH"
 
 #include "src/Common.h"
 NVS nv;
@@ -39,6 +39,7 @@ NVS nv;
 #include "src/userInterface/UserInterface.h"
 #include "src/libApp/weather/Weather.h"
 #include "src/libApp/sqm/sqm.h"
+
 
 #if DEBUG == PROFILER
   extern void profiler();
@@ -82,8 +83,7 @@ void systemServices() {
     sqm.setTemperature( onStep.MyTemperature);
     float mg = sqm.getSQM();
     onStep.MySQM  = mg; 
-    VF("MSG: SQM = ");
-  }
+ }
 #endif
 
 void setup(void) {
@@ -106,6 +106,7 @@ void setup(void) {
 
   userInterface.init(Version, pin, active, SERIAL_ONSTEP_BAUD_DEFAULT, static_cast<OLED>(DISPLAY_OLED));
 
+  
   #if WEATHER != OFF
     // get any BME280 or BMP280 ready
     weather.init();
