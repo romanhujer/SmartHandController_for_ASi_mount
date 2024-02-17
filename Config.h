@@ -19,7 +19,7 @@
                                           //         The SSD1309 is often used on 1.54" or 2.3" I2C displays.
 
 // ZWO ASI_MOUNT --------------------------------------------------------------------------------------------------------------------
-#define ASI_MOUNT         ON// ON or AM5 AM3  OFF
+#define ASI_MOUNT         ON // ON or AM5 AM3  OFF
 #define ASI_MOUNT_PORT    4030   
 
 // SERIAL PORTS --------------------------------------------------------------------------------------------------------------------

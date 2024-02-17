@@ -101,13 +101,13 @@ void UI::menuLocalDateTime() {
           }
        }
 #if LOCAL_RTC != OFF 
-      int hour = int(newTime / 3600);
-      int minute = int((newTime - hour * 3600)/60);  
-      int second =  newTime - hour * 3600 - minute * 60;        
+      uint8_t hour = int(newTime / 3600);
+      uint8_t minute = int((newTime - hour * 3600)/60);  
+      uint8_t second =  newTime - hour * 3600 - minute * 60;        
 #if DEBUG != OFF
       char s[30];
       sprintf(s,"%4d-%02d-%02d %02d:%02d:%02d", year, month ,day, hour, minute, second );
-      VF("MSG: Update time/date" ); VL(s);  
+      VF("MSG: Update RTC time/date" ); VL(s);  
 #endif
        Rtc.set(year+2000, month, day, hour, minute, second);
 #endif
