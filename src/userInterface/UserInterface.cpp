@@ -890,7 +890,7 @@ queryAgain:
    VF("MSG: Mount Time: "); VL(s); 
    mtd.hour = strtol(&s[0], &pEnd, 10);
    mtd.minute = strtol(&s[3], &pEnd, 10);
-   mtd.second = strtol(&s[3], &pEnd, 10);
+   mtd.second = strtol(&s[6], &pEnd, 10);
    mTime = long(mtd.hour) + long(mtd.minute) * 100L + long(mtd.second) * 10000L;
    if (mDate < rDate) {
     VLF("MSG: Moute time & date is less than RTC set mount time & date)");
