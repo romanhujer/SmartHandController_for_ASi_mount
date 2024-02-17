@@ -162,6 +162,10 @@
 #define L_PPS_BEST "Best"
 #define L_PPS_EAST "East"
 #define L_PPS_WEST "West"
+#define L_MOUNT_IS "Mount is"
+#define L_MOUNT    "Mount"
+#define L_DATE     "Date: "
+#define L_TIME     "Time: "
 
 // -------------------- menu, settings ---------------------
 

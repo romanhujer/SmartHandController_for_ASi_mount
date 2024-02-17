@@ -834,7 +834,7 @@ initAgain:
   VLF("MSG: Connect, looking for OnStep...");
 
 queryAgain:
-  if (thisTry % 1 == 0) message.show(L_LOOKING, "OnStep", 1000); else message.show(L_LOOKING, "...", 1000);
+  if (thisTry % 1 == 0) message.show(L_LOOKING, L_MOUNT, 1000); else message.show(L_LOOKING, "...", 1000);
 
   for (int i = 0; i < 3; i++) {
     SERIAL_ONSTEP.print(":#");
@@ -858,8 +858,12 @@ queryAgain:
       goto initAgain;
     }
   }
+  char mount_version[10];
+  strcpy(mount_version, s);
+  mount_version[strlen(mount_version)-1]='\0';
   VF("MSG: Connect, found ");  VL(s); 
-
+  message.show(L_MOUNT_IS, mount_version, 2000);
+  
 // Check and set mount  time/date from RTC
 #if LOCAL_RTC != OFF
   if ( Rtc.isReady()) {
@@ -917,9 +921,20 @@ queryAgain:
   else  { DLF("MSG: RTC not Ready");}
 #endif // end of LOCAL_RTC
 
+// Display connectios time
+char st_date[15]; strcpy(st_date, "");
+char st_time[15]; strcpy(st_date, "");
+ r = onStep.Get(":GC#", s ); s[8]='\0';
+// message.show( L_DATE,  s, 2000);  
+ strcat(st_date, L_DATE );
+ strcat(st_date, s); 
+ r = onStep.Get(":GL#", s ); s [8]='\0';
+ strcat(st_time, L_TIME );
+ strcat(st_time, s); 
+ message.show( st_date, st_time, 2000);  
+ 
 again2:
   delay(1000);
-
   // OnStep coordinate mode for getting and setting RA/Dec
   // 0 = OBSERVED_PLACE (same as not supported)
   // 1 = TOPOCENTRIC (does refraction)
@@ -963,6 +978,5 @@ again2:
 #if ASI_MOUNT == OFF  
   hasAuxFeatures = status.featureScan();
 #endif
-  status.connected = true;
 }
 UI userInterface;

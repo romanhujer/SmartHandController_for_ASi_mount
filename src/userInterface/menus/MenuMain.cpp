@@ -16,7 +16,7 @@
     static unsigned short current_selection_wifi = 1;
 
     int wifiCount = 0;
-    char host_list[60];
+    char host_list[80];  // 4*20
     strcpy(host_list, "");
     if (strlen(STA1_HOST_NAME) != 0) {
       wifiCount++;
