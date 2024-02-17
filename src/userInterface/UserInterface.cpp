@@ -903,11 +903,11 @@ queryAgain:
    if (mDate < rDate) {
     VLF("MSG: Mount time & date is less than RTC set mount time & date)");
     sprintf(s, ":SC%02d/%02d/%02d#", rtd.month, rtd.day, rtd.year); onStep.Set(s);
-    sprintf(s, ":SL%02d:%02d!%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
+    sprintf(s, ":SL%02d:%02d:%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
    } 
    else if ((mDate == rDate) && (mTime < rTime)) {
      VLF("MSG: Mount time is less than RTC set mount time");
-     sprintf(s, ":SL%02d:%02d!%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
+     sprintf(s, ":SL%02d:%02d:%02d#", rtd.hour, rtd.minute, rtd.second); onStep.Set(s);
     }
     else {
       VLF("MSG: Mount time is greater than RTC sync RTC time");
