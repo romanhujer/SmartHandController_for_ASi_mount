@@ -770,7 +770,7 @@ bool UI::SelectStarAlign() {
 }
 
 void UI::connect() {
-  char s[20] = "";
+  char s[25] = "";
   int thisTry = 0;
   bool connectSuccess;
 
@@ -866,10 +866,12 @@ queryAgain:
    rtcTimeDate rtd, mtd;
    long rDate,mDate,rTime,mTime;
    rtd = Rtc.get();
+#if DEBUG != OFF
    sprintf(s,"%4d-%02d-%02d ", rtd.year, rtd.month, rtd.day);
    VF("MSG: Rtc.get() Date: "); VL(s); 
    sprintf(s,"%02d:%02d:%02d ", rtd.hour, rtd.minute , rtd.second);
    VF("MSG: Rtc.get() Time: "); VL(s); 
+#endif
    if  ( !rtd.valid || rtd.year < 2024 || rtd.year > 3000 ) {       
         VLF("MSG: Set Time/Date: 2024-01-01 00:00:00");
         Rtc.set(2024, 1, 1, 0, 0, 0);
@@ -877,7 +879,7 @@ queryAgain:
    }
    rtd.year = rtd.year - 2000;
    rDate = long(rtd.day) + long(rtd.month) * 100L + long(rtd.year) * 10000L;
-   rTime = long(rtd.hour) + long(rtd.minute) * 100L + long(rtd.second) * 10000L;
+   rTime = long(rtd.hour) * 10000L + long(rtd.minute) * 100L + long(rtd.second);
    VLF("MSG: Get mount date & time");
    r = onStep.Get(":GC#", s );
    VF("MSG: Mount Date: "); VL(s); 
@@ -891,7 +893,13 @@ queryAgain:
    mtd.hour = strtol(&s[0], &pEnd, 10);
    mtd.minute = strtol(&s[3], &pEnd, 10);
    mtd.second = strtol(&s[6], &pEnd, 10);
-   mTime = long(mtd.hour) + long(mtd.minute) * 100L + long(mtd.second) * 10000L;
+   mTime = long(mtd.hour)* 10000L + long(mtd.minute) * 100L + long(mtd.second);
+#if DEBUG != OFF
+   sprintf(s, "M %d %d", mDate, mTime);
+   VF("MSG: "); VL(s); 
+   sprintf(s, "R %d %d", rDate, rTime);
+   VF("MSG: "); VL(s); 
+#endif   
    if (mDate < rDate) {
     VLF("MSG: Moute time & date is less than RTC set mount time & date)");
     sprintf(s, ":SC%02d/%02d/%02d#", rtd.month, rtd.day, rtd.year); onStep.Set(s);
